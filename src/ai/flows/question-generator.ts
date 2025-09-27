@@ -44,6 +44,7 @@ const questionGeneratorFlow = ai.defineFlow(
     name: 'questionGeneratorFlow',
     inputSchema: QuestionGeneratorInputSchema,
     outputSchema: QuestionGeneratorOutputSchema,
+    retries: 3, // Retry up to 3 times on failure
   },
   async input => {
     const {output} = await prompt(input);
