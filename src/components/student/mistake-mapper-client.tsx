@@ -21,6 +21,7 @@ import { Loader, Wand2, Lightbulb } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import MistakeSimilarityChart from './mistake-similarity-chart';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { useToast } from '@/hooks/use-toast';
 
 const formSchema = z.object({
   studentAnswer: z.string().min(1, 'Please enter your answer.'),
@@ -32,6 +33,7 @@ export default function MistakeMapperClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingQuestion, setIsGeneratingQuestion] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,17 +50,24 @@ export default function MistakeMapperClient() {
     form.reset();
     try {
       const result = await generateQuestion({ topic: 'High School Algebra' });
+      if (result.error || !result.question || !result.correctAnswer) {
+        throw new Error(result.error || 'Failed to generate question.');
+      }
       setGeneratedQuestion(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating question:', error);
-      // You would show a toast here
+      toast({
+        variant: "destructive",
+        title: "Question Generation Failed",
+        description: error.message || "We couldn't generate a new question. Please try again later.",
+      });
     } finally {
       setIsGeneratingQuestion(false);
     }
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!generatedQuestion) return;
+    if (!generatedQuestion || !generatedQuestion.question || !generatedQuestion.correctAnswer) return;
     setIsLoading(true);
     setAnalysis(null);
     setIsCorrect(null);
@@ -74,9 +83,13 @@ export default function MistakeMapperClient() {
       } else {
         setIsCorrect(false);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error analyzing mistake:', error);
-      // Here you would show an error toast to the user
+      toast({
+        variant: "destructive",
+        title: "Analysis Failed",
+        description: "The AI analysis service is currently unavailable. Please try again later.",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +124,7 @@ export default function MistakeMapperClient() {
             </div>
         )}
 
-        {generatedQuestion && (
+        {generatedQuestion && generatedQuestion.question && (
           <Card>
             <CardHeader>
               <CardTitle>Your Question</CardTitle>

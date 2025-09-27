@@ -17,8 +17,9 @@ const QuestionGeneratorInputSchema = z.object({
 export type QuestionGeneratorInput = z.infer<typeof QuestionGeneratorInputSchema>;
 
 const QuestionGeneratorOutputSchema = z.object({
-  question: z.string().describe('The generated question.'),
-  correctAnswer: z.string().describe('The correct answer to the generated question.'),
+  question: z.string().describe('The generated question.').optional(),
+  correctAnswer: z.string().describe('The correct answer to the generated question.').optional(),
+  error: z.string().optional(),
 });
 export type QuestionGeneratorOutput = z.infer<typeof QuestionGeneratorOutputSchema>;
 
@@ -46,8 +47,13 @@ const questionGeneratorFlow = ai.defineFlow(
     outputSchema: QuestionGeneratorOutputSchema,
     retries: 3, // Retry up to 3 times on failure
   },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
+  async (input) => {
+    try {
+      const {output} = await prompt(input);
+      return output!;
+    } catch (e: any) {
+        console.error("Error in questionGeneratorFlow:", e);
+        return { error: "The question generation service is currently unavailable. Please try again later." };
+    }
   }
 );
