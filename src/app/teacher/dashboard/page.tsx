@@ -1,4 +1,7 @@
 
+'use client';
+
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,10 +12,27 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ArrowRight, BookOpen, UserCheck, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import ClassPerformanceChart from "@/components/teacher/class-performance-chart";
+import { useToast } from "@/hooks/use-toast";
 
 export default function TeacherDashboardPage() {
+  const [doubts, setDoubts] = useState(mockStudentDoubts);
+  const { toast } = useToast();
+
   const students_needing_help = mockStudents.filter(s => s.progress < 60);
-  const pending_doubts = mockStudentDoubts.filter(d => d.status === 'Pending');
+  const pending_doubts = doubts.filter(d => d.status === 'Pending');
+
+  const handleRespond = (doubtId: string) => {
+    setDoubts(currentDoubts => 
+      currentDoubts.map(d => 
+        d.id === doubtId ? { ...d, status: 'Resolved' } : d
+      )
+    );
+    toast({
+      title: "Response Sent",
+      description: "The student has been notified that their doubt is resolved.",
+    });
+  };
+
 
   return (
     <div className="flex flex-col gap-8">
@@ -69,7 +89,7 @@ export default function TeacherDashboardPage() {
             <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                     <span>Student Doubts</span>
-                    <Badge variant="destructive">{pending_doubts.length} Pending</Badge>
+                    {pending_doubts.length > 0 && <Badge variant="destructive">{pending_doubts.length} Pending</Badge>}
                 </CardTitle>
                 <CardDescription>Requests from students who need help.</CardDescription>
             </CardHeader>
@@ -85,7 +105,7 @@ export default function TeacherDashboardPage() {
                                 <p className="font-semibold">{doubt.studentName}</p>
                                 <p className="text-sm text-muted-foreground">Needs help in <span className="font-medium">{doubt.subject}</span></p>
                             </div>
-                            <Button variant="outline" size="sm">Respond</Button>
+                            <Button variant="outline" size="sm" onClick={() => handleRespond(doubt.id)}>Respond</Button>
                         </li>
                     ))}
                 </ul>
