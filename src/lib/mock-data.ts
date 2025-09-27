@@ -41,10 +41,11 @@ export const mockAiTwinProfile = {
 }
 
 export const mockLessons = [
-    { id: 'les-01', title: 'Introduction to Algebra', subject: 'Mathematics', completed: true },
-    { id: 'les-02', title: 'The Cell Structure', subject: 'Biology', completed: true },
-    { id: 'les-03', title: 'Understanding Quadratic Equations', subject: 'Mathematics', completed: false },
-    { id: 'les-04', title: 'The American Revolution', subject: 'History', completed: false },
+    { id: 'les-01', title: 'Factoring Trinomials', subject: 'Mathematics', completed: true },
+    { id: 'les-02', title: 'Mitochondria: The Powerhouse', subject: 'Biology', completed: true },
+    { id: 'les-03', title: 'The Power of Photosynthesis', subject: 'Biology', completed: false },
+    { id: 'les-04', title: 'Creative Writing: Building a Narrative', subject: 'Literature', completed: false },
+    { id: 'les-05', title: 'The Causes of World War I', subject: 'History', completed: false },
 ];
 
 export const mockRecentActivity = [

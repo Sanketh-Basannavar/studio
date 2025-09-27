@@ -75,7 +75,7 @@ export default function StudentDashboardPage() {
               <div className="p-2 rounded-full bg-primary/20 text-primary">
                 <CheckCircle className="h-5 w-5" />
               </div>
-              <p className="text-sm">You've mastered linear equations! Great job. Try tackling quadratic equations next.</p>
+              <p className="text-sm">You've mastered factoring trinomials! Great job. Try tackling quadratic equations next.</p>
             </div>
             <div className="flex items-start gap-4 p-3 rounded-lg bg-secondary">
               <div className="p-2 rounded-full bg-accent/20 text-accent">
@@ -97,12 +97,12 @@ export default function StudentDashboardPage() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {mockLessons.map((lesson, index) => (
+            {mockLessons.filter(l => !l.completed).map((lesson, index) => (
               <li key={lesson.id}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-full ${lesson.completed ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                        {lesson.completed ? <CheckCircle className="h-5 w-5"/> : <BookOpen className="h-5 w-5"/>}
+                    <div className={'flex h-10 w-10 items-center justify-center rounded-full bg-secondary'}>
+                        <BookOpen className="h-5 w-5"/>
                     </div>
                     <div>
                       <h3 className="font-semibold">{lesson.title}</h3>
@@ -110,13 +110,12 @@ export default function StudentDashboardPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    {lesson.completed && <Badge variant="default">Completed</Badge>}
                     <Button variant="ghost" size="icon" asChild>
                         <Link href="/student/lesson"><ArrowRight className="h-4 w-4"/></Link>
                     </Button>
                   </div>
                 </div>
-                {index < mockLessons.length - 1 && <Separator className="mt-4" />}
+                {index < mockLessons.filter(l => !l.completed).length - 1 && <Separator className="mt-4" />}
               </li>
             ))}
           </ul>
