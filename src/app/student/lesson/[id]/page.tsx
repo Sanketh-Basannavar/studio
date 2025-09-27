@@ -37,14 +37,21 @@ export default function SampleLessonPage() {
         if (result.media) {
           setAudioData(result.media);
         } else {
-          throw new Error(result.error || 'Audio data is missing.');
+          // If there's an error message in the response, show a toast.
+          toast({
+              variant: "destructive",
+              title: "Audio Generation Failed",
+              description: result.error || "An unknown error occurred while generating audio.",
+          });
+          setIsAudioEnabled(false); // Toggle the switch off
         }
       } catch (error: any) {
+        // This will catch unexpected network errors or if the flow itself crashes.
         console.error("Failed to generate audio", error);
         toast({
             variant: "destructive",
             title: "Audio Generation Failed",
-            description: error.message || "We couldn't generate the audio for this lesson. Please try again later.",
+            description: "We couldn't generate the audio for this lesson. Please try again later.",
         });
         setIsAudioEnabled(false);
       } finally {
