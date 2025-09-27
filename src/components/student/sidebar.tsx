@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -10,6 +11,8 @@ import {
   Target,
   Star,
   Award,
+  BookCheck,
+  LifeBuoy,
 } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import {
@@ -25,9 +28,11 @@ import {
 const menuItems = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/student/mistake-mapper', label: 'Mistake Mapper', icon: Target },
+  { href: '/student/assignments', label: 'Assignments', icon: BookCheck },
   { href: '/student/profile', label: 'AI Twin Profile', icon: BrainCircuit },
   { href: '/student/rewards', label: 'EduCredits', icon: Star },
   { href: '/student/certificates', label: 'Certificates', icon: Award },
+  { href: '/student/ask-for-help', label: 'Ask for Help', icon: LifeBuoy },
 ];
 
 export default function StudentSidebar() {

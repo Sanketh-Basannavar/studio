@@ -1,16 +1,18 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { mockStudents, mockClassPerformance, mockRecentActivity } from "@/lib/mock-data";
+import { mockStudents, mockClassPerformance, mockRecentActivity, mockStudentDoubts } from "@/lib/mock-data";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { ArrowRight, BookOpen, UserCheck } from "lucide-react";
+import { ArrowRight, BookOpen, UserCheck, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import ClassPerformanceChart from "@/components/teacher/class-performance-chart";
 
 export default function TeacherDashboardPage() {
   const students_needing_help = mockStudents.filter(s => s.progress < 60);
+  const pending_doubts = mockStudentDoubts.filter(d => d.status === 'Pending');
 
   return (
     <div className="flex flex-col gap-8">
@@ -52,16 +54,50 @@ export default function TeacherDashboardPage() {
             </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Class Performance by Subject</CardTitle>
-          <CardDescription>Average scores in the last assessment.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ClassPerformanceChart />
-        </CardContent>
-      </Card>
+      
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Class Performance by Subject</CardTitle>
+            <CardDescription>Average scores in the last assessment.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ClassPerformanceChart />
+          </CardContent>
+        </Card>
+         <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                    <span>Student Doubts</span>
+                    <Badge variant="destructive">{pending_doubts.length} Pending</Badge>
+                </CardTitle>
+                <CardDescription>Requests from students who need help.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ul className="space-y-4">
+                    {pending_doubts.map(doubt => (
+                        <li key={doubt.id} className="flex items-center gap-4">
+                            <Avatar className="h-9 w-9">
+                                <AvatarImage src={PlaceHolderImages.find(p => p.id === doubt.studentAvatar)?.imageUrl} />
+                                <AvatarFallback>{doubt.studentName.charAt(0)}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-grow">
+                                <p className="font-semibold">{doubt.studentName}</p>
+                                <p className="text-sm text-muted-foreground">Needs help in <span className="font-medium">{doubt.subject}</span></p>
+                            </div>
+                            <Button variant="outline" size="sm">Respond</Button>
+                        </li>
+                    ))}
+                </ul>
+                 {pending_doubts.length === 0 && (
+                    <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground p-4">
+                        <HelpCircle className="h-8 w-8 mb-2" />
+                        <p>No pending help requests from students.</p>
+                    </div>
+                )}
+            </CardContent>
+        </Card>
+      </div>
       
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>

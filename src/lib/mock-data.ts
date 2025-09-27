@@ -178,3 +178,13 @@ export const mockRecentActivity = [
     { id: 'act-2', studentName: 'Alex Johnson', activity: 'earned 100 EduCredits for a high quiz score.', timestamp: '1h ago' },
     { id: 'act-3', studentName: 'Diana Ross', activity: 'mastered the "Linear Equations" topic.', timestamp: '3h ago' },
 ]
+
+export const mockAssignments = [
+    { id: 'assign-01', title: 'Quadratic Equations Worksheet', subject: 'Algebra', dueDate: '3 days', type: 'Worksheet' },
+    { id: 'assign-02', title: 'Cellular Respiration Quiz', subject: 'Biology', dueDate: '5 days', type: 'Quiz' },
+];
+
+export const mockStudentDoubts = [
+    { id: 'doubt-01', studentName: 'Charles Lee', studentAvatar: 'student-avatar-3', subject: 'Algebra', timestamp: '2h ago', status: 'Pending' },
+    { id: 'doubt-02', studentName: 'Alex Johnson', studentAvatar: 'student-avatar-1', subject: 'Chemistry', timestamp: '1d ago', status: 'Resolved' },
+];
