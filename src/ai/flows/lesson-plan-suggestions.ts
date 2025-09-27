@@ -23,9 +23,10 @@ export type LessonPlanSuggestionsInput = z.infer<
 >;
 
 const LessonPlanSuggestionsOutputSchema = z.object({
-  lessonPlanSuggestion: z.string().describe('Suggested lesson plan.'),
-  worksheet: z.string().describe('Automatically generated worksheet with 5 practice problems.'),
-  quiz: z.string().describe('Automatically generated quiz with 3 multiple-choice questions.'),
+  lessonPlanSuggestion: z.string().describe('Suggested lesson plan.').optional(),
+  worksheet: z.string().describe('Automatically generated worksheet with 5 practice problems.').optional(),
+  quiz: z.string().describe('Automatically generated quiz with 3 multiple-choice questions.').optional(),
+  error: z.string().optional(),
 });
 export type LessonPlanSuggestionsOutput = z.infer<
   typeof LessonPlanSuggestionsOutputSchema
@@ -40,7 +41,11 @@ export async function suggestLessonPlan(
 const prompt = ai.definePrompt({
   name: 'lessonPlanSuggestionsPrompt',
   input: {schema: LessonPlanSuggestionsInputSchema},
-  output: {schema: LessonPlanSuggestionsOutputSchema},
+  output: {schema: z.object({
+    lessonPlanSuggestion: z.string().describe('Suggested lesson plan.'),
+    worksheet: z.string().describe('Automatically generated worksheet with 5 practice problems.'),
+    quiz: z.string().describe('Automatically generated quiz with 3 multiple-choice questions.'),
+  })},
   prompt: `You are an AI assistant designed to help teachers create lesson plans based on student performance data.
 
 Based on the following student performance data, please perform the following tasks:
@@ -59,7 +64,12 @@ const suggestLessonPlanFlow = ai.defineFlow(
     outputSchema: LessonPlanSuggestionsOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    try {
+      const {output} = await prompt(input);
+      return output!;
+    } catch (e: any) {
+        console.error("Error in suggestLessonPlanFlow:", e);
+        return { error: "The AI assistant failed to generate materials. Please try again later." };
+    }
   }
 );

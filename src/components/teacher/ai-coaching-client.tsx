@@ -72,13 +72,16 @@ export default function AiCoachingClient() {
     setIsAssigned(false);
     try {
       const result = await suggestLessonPlan(values);
+      if (result.error || !result.lessonPlanSuggestion) {
+        throw new Error(result.error || 'Failed to generate materials.');
+      }
       setSuggestions(result);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error getting suggestions:', error);
       toast({
         variant: 'destructive',
         title: 'Generation Failed',
-        description: 'The AI assistant failed to generate materials. Please try again later.',
+        description: error.message || 'The AI assistant failed to generate materials. Please try again later.',
       });
     } finally {
       setIsLoading(false);
@@ -86,7 +89,7 @@ export default function AiCoachingClient() {
   }
 
   function handleAssignToClass() {
-    if (!suggestions) return;
+    if (!suggestions || !suggestions.worksheet || !suggestions.quiz) return;
     
     // This is a mock implementation. In a real app, this would be a server action.
     const newWorksheet = {
@@ -171,7 +174,7 @@ export default function AiCoachingClient() {
               <Loader className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
-          {suggestions && (
+          {suggestions && suggestions.lessonPlanSuggestion && (
              <Tabs defaultValue="lesson-plan" className="w-full flex-grow flex flex-col">
                 <TabsList>
                   <TabsTrigger value="lesson-plan">Lesson Plan</TabsTrigger>
@@ -183,10 +186,10 @@ export default function AiCoachingClient() {
                     <div dangerouslySetInnerHTML={{ __html: suggestions.lessonPlanSuggestion.replace(/\n/g, '<br />') }} />
                   </TabsContent>
                   <TabsContent value="worksheet">
-                    <div dangerouslySetInnerHTML={{ __html: suggestions.worksheet.replace(/\n/g, '<br />') }} />
+                    <div dangerouslySetInnerHTML={{ __html: suggestions.worksheet!.replace(/\n/g, '<br />') }} />
                   </TabsContent>
                   <TabsContent value="quiz">
-                    <div dangerouslySetInnerHTML={{ __html: suggestions.quiz.replace(/\n/g, '<br />') }} />
+                    <div dangerouslySetInnerHTML={{ __html: suggestions.quiz!.replace(/\n/g, '<br />') }} />
                   </TabsContent>
                 </div>
                  <div className="mt-4 pt-4 border-t">
