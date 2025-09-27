@@ -37,4 +37,4 @@ if (typeof window !== 'undefined') {
     });
 }
 
-export { db, disableNetwork, enableNetwork };
+export { app, db, disableNetwork, enableNetwork };
