@@ -24,8 +24,8 @@ export type LessonPlanSuggestionsInput = z.infer<
 
 const LessonPlanSuggestionsOutputSchema = z.object({
   lessonPlanSuggestion: z.string().describe('Suggested lesson plan.'),
-  worksheet: z.string().describe('Automatically generated worksheet.'),
-  quiz: z.string().describe('Automatically generated quiz.'),
+  worksheet: z.string().describe('Automatically generated worksheet with 5 practice problems.'),
+  quiz: z.string().describe('Automatically generated quiz with 3 multiple-choice questions.'),
 });
 export type LessonPlanSuggestionsOutput = z.infer<
   typeof LessonPlanSuggestionsOutputSchema
@@ -43,9 +43,12 @@ const prompt = ai.definePrompt({
   output: {schema: LessonPlanSuggestionsOutputSchema},
   prompt: `You are an AI assistant designed to help teachers create lesson plans based on student performance data.
 
-  Based on the following student performance data, please provide a lesson plan suggestion, a worksheet, and a quiz.
+Based on the following student performance data, please perform the following tasks:
+1.  Provide a concise and actionable lesson plan suggestion to address the key areas of weakness.
+2.  Generate a worksheet with 5 practice problems that target these weaknesses. The problems should be clear and relevant.
+3.  Generate a short quiz with 3 multiple-choice questions to assess understanding of the concepts covered in the lesson and worksheet. Include the correct answer for each question.
 
-  Student Performance Data: {{{classPerformanceData}}}
+Student Performance Data: {{{classPerformanceData}}}
   `,
 });
 
