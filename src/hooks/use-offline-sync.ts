@@ -2,7 +2,9 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { disableNetwork, enableNetwork } from '@/lib/firebase';
+// We will import db dynamically inside the hook
+import { getFirestore } from 'firebase/firestore';
+import { app, disableNetwork, enableNetwork } from '@/lib/firebase';
 
 export function useOfflineSync() {
   const [isOffline, setIsOffline] = useState(false);
@@ -10,15 +12,22 @@ export function useOfflineSync() {
 
   useEffect(() => {
     setIsMounted(true);
-    const offlineStatus = localStorage.getItem('offline-mode') === 'true';
-    setIsOffline(offlineStatus);
+    if (typeof window !== 'undefined') {
+        const offlineStatus = localStorage.getItem('offline-mode') === 'true';
+        setIsOffline(offlineStatus);
+    }
   }, []);
 
   const setOfflineMode = useCallback((offline: boolean) => {
     if (!isMounted) return;
 
+    // Dynamically get db instance on the client
+    const db = getFirestore(app);
+
     setIsOffline(offline);
-    localStorage.setItem('offline-mode', String(offline));
+    if (typeof window !== 'undefined') {
+        localStorage.setItem('offline-mode', String(offline));
+    }
     if (offline) {
       disableNetwork(db).catch(err => console.error("Failed to disable network", err));
     } else {
@@ -28,6 +37,3 @@ export function useOfflineSync() {
 
   return { isOffline, setOfflineMode };
 }
-// Note: We need to import `db` from firebase, but because it's a server component context
-// we have to be careful. The settings page which uses this is a client component, so it's fine.
-import { db } from '@/lib/firebase';
