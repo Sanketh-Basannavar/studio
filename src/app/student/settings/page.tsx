@@ -6,9 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Bell, Brush, ChevronRight, LogOut, Globe, WifiOff } from 'lucide-react';
+import { Bell, Brush, ChevronRight, LogOut, WifiOff } from 'lucide-react';
 import Link from 'next/link';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 export default function StudentSettingsPage() {
@@ -65,26 +64,6 @@ export default function StudentSettingsPage() {
               checked={isOffline}
               onCheckedChange={setOfflineMode}
             />
-          </div>
-
-          <div className="flex items-center justify-between p-4 rounded-lg border">
-            <div className="flex items-center gap-4">
-              <Globe className="h-6 w-6 text-primary" />
-              <div>
-                <h3 className="font-semibold">Language</h3>
-                <p className="text-sm text-muted-foreground">Choose your preferred language.</p>
-              </div>
-            </div>
-            <Select defaultValue="en">
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="hi">Hindi</SelectItem>
-                <SelectItem value="kn">Kannada</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           <Card>
