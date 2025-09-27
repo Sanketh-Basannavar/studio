@@ -103,7 +103,7 @@ export default function SampleLessonPage({ params }: { params: { id: string } })
             </div>
           </CardContent>
         </Card>
-        {(isGeneratingAudio || (isAudioEnabled && audioNow, when you navigate to a lesson from the dashboard, you'll see the correct content for that specific lesson. Let me know if there's anything else!Data)) && (
+        {(isGeneratingAudio || (isAudioEnabled && audioData)) && (
           <Card>
             <CardHeader>
               <CardTitle>Lesson Audio</CardTitle>
