@@ -1,4 +1,6 @@
 
+'use client';
+
 import { BookCheck, Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +9,20 @@ import { mockAssignments } from '@/lib/mock-data';
 import { Separator } from '@/components/ui/separator';
 
 export default function AssignmentsPage() {
+
+    const handleDownload = (item: typeof mockAssignments[0]) => {
+        const content = `Subject: ${item.subject}\nType: ${item.type}\n\nTitle: ${item.title}\n\nThis is the content of your assignment. In a real application, this would be a PDF or a more structured document.`;
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${item.title.replace(/ /g, '_')}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     return (
         <div className="space-y-8">
             <div>
@@ -36,7 +52,7 @@ export default function AssignmentsPage() {
                                     </div>
                                     <div className="flex gap-2 justify-self-end items-center">
                                         <Badge variant={item.type === 'Quiz' ? 'destructive' : 'secondary'}>{item.type}</Badge>
-                                        <Button variant="outline" size="sm">
+                                        <Button variant="outline" size="sm" onClick={() => handleDownload(item)}>
                                             <Download className="mr-2 h-4 w-4" />
                                             Download
                                         </Button>
