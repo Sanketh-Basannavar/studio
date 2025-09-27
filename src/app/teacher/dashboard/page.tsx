@@ -7,7 +7,8 @@ import { mockStudents, mockClassPerformance, mockRecentActivity } from "@/lib/mo
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ArrowRight, BookOpen, UserCheck } from "lucide-react";
 import Link from "next/link";
-import { ChartContainer, ChartTooltip, ChartTooltipContent, Bar, BarChart, XAxis, YAxis } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 const chartConfig = {
   score: {
