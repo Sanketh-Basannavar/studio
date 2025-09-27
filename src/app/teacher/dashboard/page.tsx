@@ -7,15 +7,7 @@ import { mockStudents, mockClassPerformance, mockRecentActivity } from "@/lib/mo
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { ArrowRight, BookOpen, UserCheck } from "lucide-react";
 import Link from "next/link";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
-
-const chartConfig = {
-  score: {
-    label: "Average Score",
-    color: "hsl(var(--primary))",
-  },
-};
+import ClassPerformanceChart from "@/components/teacher/class-performance-chart";
 
 export default function TeacherDashboardPage() {
   const students_needing_help = mockStudents.filter(s => s.progress < 60);
@@ -67,29 +59,7 @@ export default function TeacherDashboardPage() {
           <CardDescription>Average scores in the last assessment.</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64 w-full">
-            <BarChart accessibilityLayer data={mockClassPerformance}>
-              <XAxis
-                dataKey="subject"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                fontSize={12}
-              />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                fontSize={12}
-                tickFormatter={(value) => `${value}%`}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={<ChartTooltipContent indicator="dot" />}
-              />
-              <Bar dataKey="averageScore" fill="var(--color-score)" radius={4} />
-            </BarChart>
-          </ChartContainer>
+          <ClassPerformanceChart />
         </CardContent>
       </Card>
       
