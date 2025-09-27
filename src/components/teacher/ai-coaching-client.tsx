@@ -17,10 +17,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { suggestLessonPlan, type LessonPlanSuggestionsOutput } from '@/ai/flows/lesson-plan-suggestions';
-import { Loader, Wand2, Send } from 'lucide-react';
+import { summarizeClassPerformance } from '@/ai/flows/summarize-class-performance';
+import { Loader, Wand2, Send, Sparkles } from 'lucide-react';
 import { Separator } from '../ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { mockAssignments } from '@/lib/mock-data';
+import { mockAssignments, mockClassPerformance, mockStudents } from '@/lib/mock-data';
 
 const formSchema = z.object({
   classPerformanceData: z.string().min(20, 'Please provide a more detailed summary of class performance.'),
@@ -29,6 +30,7 @@ const formSchema = z.object({
 export default function AiCoachingClient() {
   const [suggestions, setSuggestions] = useState<LessonPlanSuggestionsOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSummarizing, setIsSummarizing] = useState(false);
   const [isAssigned, setIsAssigned] = useState(false);
   const { toast } = useToast();
 
@@ -38,6 +40,31 @@ export default function AiCoachingClient() {
       classPerformanceData: '',
     },
   });
+
+  async function handleGenerateSummary() {
+    setIsSummarizing(true);
+    try {
+      const classData = {
+        students: mockStudents,
+        performance: mockClassPerformance,
+      };
+      const result = await summarizeClassPerformance({ classData: JSON.stringify(classData) });
+      if (result.summary) {
+        form.setValue('classPerformanceData', result.summary);
+      } else {
+        throw new Error(result.error || 'Failed to generate summary.');
+      }
+    } catch (error: any) {
+        toast({
+            variant: 'destructive',
+            title: 'Summary Failed',
+            description: error.message || 'The AI assistant could not generate a summary.',
+        });
+    } finally {
+        setIsSummarizing(false);
+    }
+  }
+
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
@@ -98,10 +125,16 @@ export default function AiCoachingClient() {
             name="classPerformanceData"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Class Performance Summary</FormLabel>
+                <div className="flex justify-between items-center">
+                    <FormLabel>Class Performance Summary</FormLabel>
+                    <Button type="button" variant="outline" size="sm" onClick={handleGenerateSummary} disabled={isSummarizing}>
+                        {isSummarizing ? <Loader className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                        AI Summary
+                    </Button>
+                </div>
                 <FormControl>
                   <Textarea
-                    placeholder="e.g., The class is excelling in basic algebra but struggling with quadratic equations. Specifically, factoring trinomials is a major pain point. Average quiz score on this topic was 55%."
+                    placeholder="Click 'AI Summary' to auto-generate an analysis of class performance, or type your own summary here. e.g., The class is excelling in basic algebra but struggling with quadratic equations."
                     rows={8}
                     {...field}
                   />
@@ -110,7 +143,7 @@ export default function AiCoachingClient() {
               </FormItem>
             )}
           />
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading || isSummarizing}>
             {isLoading ? (
               <>
                 <Loader className="mr-2 h-4 w-4 animate-spin" />
