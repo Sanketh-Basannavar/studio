@@ -11,3 +11,4 @@ export * from './neuro-quad-brain';
 export * from './text-to-speech';
 export * from './question-generator';
 export * from './image-generator';
+export * from './translate-content';
