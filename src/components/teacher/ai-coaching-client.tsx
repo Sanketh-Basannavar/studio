@@ -106,9 +106,15 @@ export default function AiCoachingClient() {
                   <TabsTrigger value="quiz">Quiz</TabsTrigger>
                 </TabsList>
                 <div className="mt-4 prose prose-sm dark:prose-invert max-w-none">
-                  <TabsContent value="lesson-plan" dangerouslySetInnerHTML={{ __html: suggestions.lessonPlanSuggestion.replace(/\n/g, '<br />') }} />
-                  <TabsContent value="worksheet" dangerouslySetInnerHTML={{ __html: suggestions.worksheet.replace(/\n/g, '<br />') }} />
-                  <TabsContent value="quiz" dangerouslySetInnerHTML={{ __html: suggestions.quiz.replace(/\n/g, '<br />') }} />
+                  <TabsContent value="lesson-plan">
+                    <div dangerouslySetInnerHTML={{ __html: suggestions.lessonPlanSuggestion.replace(/\n/g, '<br />') }} />
+                  </TabsContent>
+                  <TabsContent value="worksheet">
+                    <div dangerouslySetInnerHTML={{ __html: suggestions.worksheet.replace(/\n/g, '<br />') }} />
+                  </TabsContent>
+                  <TabsContent value="quiz">
+                    <div dangerouslySetInnerHTML={{ __html: suggestions.quiz.replace(/\n/g, '<br />') }} />
+                  </TabsContent>
                 </div>
             </Tabs>
           )}
