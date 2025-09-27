@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useMemo, useEffect } from 'react';
 import { notFound, useParams } from 'next/navigation';
@@ -46,9 +47,11 @@ export default function SampleLessonPage() {
 
     const translateLessonContent = async () => {
       setIsTranslating(true);
+      let translationHasError = false;
       try {
         const titlePromise = translateContent({ content: originalLesson.content.title, targetLanguage });
         const descriptionPromise = translateContent({ content: originalLesson.content.description, targetLanguage });
+        
         const sectionsPromises = originalLesson.content.sections.map(async (section) => {
           const headingPromise = translateContent({ content: section.heading, targetLanguage });
           const paragraphsPromises = section.paragraphs.map(p => translateContent({ content: p, targetLanguage }));
@@ -56,7 +59,7 @@ export default function SampleLessonPage() {
           const [translatedHeadingResult, ...translatedParagraphsResults] = await Promise.all([headingPromise, ...paragraphsPromises]);
 
           if (translatedHeadingResult.error || translatedParagraphsResults.some(p => p.error)) {
-            throw new Error('Failed to translate one or more sections.');
+            translationHasError = true;
           }
 
           return {
@@ -65,14 +68,15 @@ export default function SampleLessonPage() {
           };
         });
 
-        const [titleResult, descriptionResult, ...sectionsResults] = await Promise.all([
+        const [titleResult, descriptionResult] = await Promise.all([
           titlePromise,
           descriptionPromise,
-          ...sectionsPromises,
         ]);
+        
+        const sectionsResults = await Promise.all(sectionsPromises);
 
         if (titleResult.error || descriptionResult.error) {
-            throw new Error('Failed to translate title or description.');
+            translationHasError = true;
         }
 
         const newContent: LessonContentType = {
@@ -83,6 +87,14 @@ export default function SampleLessonPage() {
         
         setTranslatedContent(newContent);
 
+        if (translationHasError) {
+          toast({
+            variant: 'destructive',
+            title: 'Partial Translation',
+            description: 'Some parts of the lesson could not be translated. Showing original text for those sections.',
+          });
+        }
+
       } catch (error: any) {
         console.error("Translation failed", error);
         toast({
@@ -90,7 +102,7 @@ export default function SampleLessonPage() {
           title: 'Translation Failed',
           description: error.message || 'Could not translate the lesson content.',
         });
-        setTargetLanguage('en'); // Revert to English on failure
+        setTranslatedContent(originalLesson.content); // Revert to original content on major failure
       } finally {
         setIsTranslating(false);
       }
