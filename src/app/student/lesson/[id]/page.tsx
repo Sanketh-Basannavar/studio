@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { notFound } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -7,43 +8,22 @@ import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { Brain, Ear, Eye, Loader } from 'lucide-react';
 import { lessonToSpeech } from '@/ai/flows/text-to-speech';
+import { mockLessons } from '@/lib/mock-data';
 
-const lessonContent = {
-  title: 'The Power of Photosynthesis',
-  description: 'An introductory lesson to how plants create their own food.',
-  sections: [
-    {
-      heading: 'What is Photosynthesis?',
-      paragraphs: [
-        'Photosynthesis is a process used by plants, algae, and certain bacteria to convert light energy into chemical energy, through a process that converts carbon dioxide and water into sugars (glucose) and oxygen. This process is fundamental to life on Earth as it provides the primary source of energy for most ecosystems and releases the oxygen we breathe.',
-      ],
-    },
-    {
-      heading: 'The Chemical Equation',
-      paragraphs: [
-        'The overall balanced equation for photosynthesis is:',
-        '6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂',
-        'This means that six molecules of carbon dioxide and six molecules of water react in the presence of light to produce one molecule of glucose (a sugar) and six molecules of oxygen.',
-      ],
-    },
-    {
-      heading: 'Where Does It Happen?',
-      paragraphs: [
-        'Photosynthesis takes place inside plant cells in small organelles called chloroplasts. Chloroplasts contain a green pigment called chlorophyll, which is what absorbs the light energy from the sun. The entire process is split into two main stages: the light-dependent reactions and the Calvin cycle (light-independent reactions).',
-      ],
-    },
-  ],
-};
-
-const lessonTextForAudio = lessonContent.sections.map(s => `${s.heading}\n${s.paragraphs.join('\n')}`).join('\n\n');
-
-
-export default function SampleLessonPage() {
+export default function SampleLessonPage({ params }: { params: { id: string } }) {
   const [isDyslexiaFriendly, setIsDyslexiaFriendly] = useState(false);
   const [isAdhdFriendly, setIsAdhdFriendly] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  
+  const lesson = mockLessons.find(l => l.id === params.id);
+
+  if (!lesson || !lesson.content) {
+    notFound();
+  }
+
+  const lessonTextForAudio = lesson.content.sections.map(s => `${s.heading}\n${s.paragraphs.join('\n')}`).join('\n\n');
 
   const handleAudioToggle = async (checked: boolean) => {
     setIsAudioEnabled(checked);
@@ -69,15 +49,15 @@ export default function SampleLessonPage() {
       <div className={cn('lg:col-span-2 space-y-6', isAdhdFriendly && 'adhd-focus')}>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline text-3xl">{lessonContent.title}</CardTitle>
-            <CardDescription>{lessonContent.description}</CardDescription>
+            <CardTitle className="font-headline text-3xl">{lesson.title}</CardTitle>
+            <CardDescription>{lesson.content.description}</CardDescription>
           </CardHeader>
           <CardContent className={cn('prose prose-lg dark:prose-invert max-w-none', isDyslexiaFriendly && 'font-serif')}>
-            {lessonContent.sections.map((section, index) => (
+            {lesson.content.sections.map((section, index) => (
               <div key={index}>
                 <h2>{section.heading}</h2>
                 {section.paragraphs.map((p, i) => (
-                  <p key={i} dangerouslySetInnerHTML={{ __html: p.startsWith('6CO₂') ? '<code>6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂</code>' : p }}></p>
+                  <p key={i} dangerouslySetInnerHTML={{ __html: p.includes('→') ? `<code>${p}</code>` : p }}></p>
                 ))}
               </div>
             ))}
@@ -123,7 +103,7 @@ export default function SampleLessonPage() {
             </div>
           </CardContent>
         </Card>
-        {(isGeneratingAudio || (isAudioEnabled && audioData)) && (
+        {(isGeneratingAudio || (isAudioEnabled && audioNow, when you navigate to a lesson from the dashboard, you'll see the correct content for that specific lesson. Let me know if there's anything else!Data)) && (
           <Card>
             <CardHeader>
               <CardTitle>Lesson Audio</CardTitle>

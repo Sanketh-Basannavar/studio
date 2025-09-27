@@ -24,7 +24,6 @@ const menuItems = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/student/mistake-mapper', label: 'Mistake Mapper', icon: Target },
   { href: '/student/profile', label: 'AI Twin Profile', icon: BrainCircuit },
-  { href: '/student/lesson', label: 'Sample Lesson', icon: BookOpen },
 ];
 
 export default function StudentSidebar() {
@@ -41,7 +40,7 @@ export default function StudentSidebar() {
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton
                 asChild
-                isActive={pathname === item.href}
+                isActive={pathname.startsWith(item.href)}
                 tooltip={{ children: item.label, side: 'right' }}
               >
                 <Link href={item.href}>
@@ -51,6 +50,19 @@ export default function StudentSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          {/* Manually added sample lesson link for visibility */}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={pathname.includes('/student/lesson')}
+              tooltip={{ children: 'Sample Lesson', side: 'right' }}
+            >
+              <Link href="/student/lesson/les-03">
+                <BookOpen />
+                <span>Sample Lesson</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>

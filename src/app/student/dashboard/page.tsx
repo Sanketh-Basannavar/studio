@@ -8,6 +8,7 @@ import { ArrowRight, BookOpen, CheckCircle, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function StudentDashboardPage() {
+  const upcomingLessons = mockLessons.filter(l => !l.completed);
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -97,7 +98,7 @@ export default function StudentDashboardPage() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-4">
-            {mockLessons.filter(l => !l.completed).map((lesson, index) => (
+            {upcomingLessons.map((lesson, index) => (
               <li key={lesson.id}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -111,11 +112,11 @@ export default function StudentDashboardPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <Button variant="ghost" size="icon" asChild>
-                        <Link href="/student/lesson"><ArrowRight className="h-4 w-4"/></Link>
+                        <Link href={`/student/lesson/${lesson.id}`}><ArrowRight className="h-4 w-4"/></Link>
                     </Button>
                   </div>
                 </div>
-                {index < mockLessons.filter(l => !l.completed).length - 1 && <Separator className="mt-4" />}
+                {index < upcomingLessons.length - 1 && <Separator className="mt-4" />}
               </li>
             ))}
           </ul>

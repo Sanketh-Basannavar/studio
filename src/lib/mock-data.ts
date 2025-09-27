@@ -41,11 +41,136 @@ export const mockAiTwinProfile = {
 }
 
 export const mockLessons = [
-    { id: 'les-01', title: 'Factoring Trinomials', subject: 'Mathematics', completed: true },
-    { id: 'les-02', title: 'Mitochondria: The Powerhouse', subject: 'Biology', completed: true },
-    { id: 'les-03', title: 'The Power of Photosynthesis', subject: 'Biology', completed: false },
-    { id: 'les-04', title: 'Creative Writing: Building a Narrative', subject: 'Literature', completed: false },
-    { id: 'les-05', title: 'The Causes of World War I', subject: 'History', completed: false },
+  { 
+    id: 'les-01', 
+    title: 'Factoring Trinomials', 
+    subject: 'Mathematics', 
+    completed: true,
+    content: {
+      title: 'Mastering Factoring Trinomials',
+      description: 'Learn how to factor trinomials of the form ax² + bx + c.',
+      sections: [
+        {
+          heading: 'Introduction to Trinomials',
+          paragraphs: [
+            'A trinomial is a polynomial with three terms. We will focus on quadratic trinomials, which have the highest exponent of 2.',
+            'The general form is ax² + bx + c, where a, b, and c are coefficients.',
+          ],
+        },
+        {
+          heading: 'Factoring when a = 1',
+          paragraphs: [
+            'When the leading coefficient \'a\' is 1, the trinomial is simpler: x² + bx + c.',
+            'To factor this, you need to find two numbers that multiply to \'c\' and add up to \'b\'.',
+            'For example, to factor x² + 5x + 6, we need two numbers that multiply to 6 and add to 5. These numbers are 2 and 3. So, the factored form is (x + 2)(x + 3).',
+          ],
+        },
+      ],
+    },
+  },
+  { 
+    id: 'les-02', 
+    title: 'Mitochondria: The Powerhouse', 
+    subject: 'Biology', 
+    completed: true,
+    content: {
+      title: 'Mitochondria: The Powerhouse of the Cell',
+      description: 'An in-depth look at the function of mitochondria.',
+      sections: [
+        {
+          heading: 'What are Mitochondria?',
+          paragraphs: [
+            'Mitochondria are organelles found in the cells of most eukaryotes. They are often referred to as the "powerhouses" of the cell.',
+            'Their main job is to generate most of the cell\'s supply of adenosine triphosphate (ATP), used as a source of chemical energy.',
+          ],
+        },
+      ],
+    },
+  },
+  { 
+    id: 'les-03', 
+    title: 'The Power of Photosynthesis', 
+    subject: 'Biology', 
+    completed: false,
+    content: {
+      title: 'The Power of Photosynthesis',
+      description: 'An introductory lesson to how plants create their own food.',
+      sections: [
+        {
+          heading: 'What is Photosynthesis?',
+          paragraphs: [
+            'Photosynthesis is a process used by plants, algae, and certain bacteria to convert light energy into chemical energy, through a process that converts carbon dioxide and water into sugars (glucose) and oxygen. This process is fundamental to life on Earth as it provides the primary source of energy for most ecosystems and releases the oxygen we breathe.',
+          ],
+        },
+        {
+          heading: 'The Chemical Equation',
+          paragraphs: [
+            'The overall balanced equation for photosynthesis is:',
+            '6CO₂ + 6H₂O + Light Energy → C₆H₁₂O₆ + 6O₂',
+            'This means that six molecules of carbon dioxide and six molecules of water react in the presence of light to produce one molecule of glucose (a sugar) and six molecules of oxygen.',
+          ],
+        },
+        {
+          heading: 'Where Does It Happen?',
+          paragraphs: [
+            'Photosynthesis takes place inside plant cells in small organelles called chloroplasts. Chloroplasts contain a green pigment called chlorophyll, which is what absorbs the light energy from the sun. The entire process is split into two main stages: the light-dependent reactions and the Calvin cycle (light-independent reactions).',
+          ],
+        },
+      ],
+    }
+  },
+  { 
+    id: 'les-04', 
+    title: 'Creative Writing: Building a Narrative', 
+    subject: 'Literature', 
+    completed: false,
+    content: {
+      title: 'Creative Writing: Building a Strong Narrative',
+      description: 'Learn the key elements of storytelling.',
+      sections: [
+        {
+          heading: 'The Core Components',
+          paragraphs: [
+            'Every great story has a few key components: a plot, characters, a setting, a conflict, and a theme.',
+            'We will explore each of these elements and how they work together to create a compelling narrative.',
+          ],
+        },
+        {
+          heading: 'Plot Structure',
+          paragraphs: [
+            'The plot is the sequence of events in a story. A classic plot structure includes the exposition, rising action, climax, falling action, and resolution.',
+            'Understanding this structure can help you build tension and create a satisfying conclusion for your readers.',
+          ],
+        },
+      ],
+    }
+  },
+  { 
+    id: 'les-05', 
+    title: 'The Causes of World War I', 
+    subject: 'History', 
+    completed: false,
+    content: {
+      title: 'The Spark: Causes of World War I',
+      description: 'Understand the complex factors that led to the outbreak of the Great War.',
+      sections: [
+        {
+          heading: 'The MAIN Causes',
+          paragraphs: [
+            'Historians often summarize the long-term causes of World War I with the acronym MAIN: Militarism, Alliances, Imperialism, and Nationalism.',
+            'We will examine how each of these factors created a volatile political climate in early 20th-century Europe.',
+          ],
+        },
+        {
+          heading: 'The Assassination',
+          paragraphs: [
+            'The immediate cause, or "spark," for the war was the assassination of Archduke Franz Ferdinand of Austria-Hungary in Sarajevo on June 28, 1914.',
+            'This event triggered a series of ultimatums and mobilizations, plunging the continent into war.',
+          ],
+        },
+      ],
+    }
+  },
 ];
 
 export const mockRecentActivity = [
