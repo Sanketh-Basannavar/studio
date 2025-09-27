@@ -32,7 +32,7 @@ const prompt = ai.definePrompt({
   input: {schema: TranslateContentInputSchema},
   output: {schema: z.object({ translatedContent: z.string() })},
   prompt: `Translate the following text into the language specified by the target language code (en: English, hi: Hindi, kn: Kannada).
-Do not transliterate. Provide a direct and accurate translation.
+Do not transliterate. Provide a direct and accurate translation. For subject-specific technical terms (like in math or science), ensure you use the correct corresponding term in the target language.
 
 Target Language: {{{targetLanguage}}}
 Text to Translate:
@@ -48,6 +48,7 @@ const translateContentFlow = ai.defineFlow(
     retries: 2,
   },
   async (input) => {
+    // If the target language is English, no need to translate.
     if (input.targetLanguage === 'en') {
         return { translatedContent: input.content };
     }
