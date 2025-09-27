@@ -13,7 +13,7 @@ import {z} from 'genkit';
 
 const MistakeMapperInputSchema = z.object({
   question: z.string().describe('The question that was asked.'),
-  studentAnswer: z.string().describe('The student\'s answer to the question.'),
+  studentAnswer: z.string().describe("The student's answer to the question."),
   correctAnswer: z.string().describe('The correct answer to the question.'),
 });
 export type MistakeMapperInput = z.infer<typeof MistakeMapperInputSchema>;
@@ -46,6 +46,7 @@ const mistakeMapperFlow = ai.defineFlow(
     name: 'mistakeMapperFlow',
     inputSchema: MistakeMapperInputSchema,
     outputSchema: MistakeMapperOutputSchema,
+    retries: 3, // Retry up to 3 times on failure
   },
   async input => {
     const {output} = await prompt(input);
