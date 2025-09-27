@@ -12,7 +12,8 @@ import wav from 'wav';
 import {googleAI} from '@genkit-ai/googleai';
 
 const LessonToSpeechOutputSchema = z.object({
-  media: z.string().describe('The base64 encoded audio data with a data URI scheme.'),
+  media: z.string().describe('The base64 encoded audio data with a data URI scheme.').optional(),
+  error: z.string().optional(),
 });
 export type LessonToSpeechOutput = z.infer<typeof LessonToSpeechOutputSchema>;
 
@@ -55,27 +56,32 @@ const lessonToSpeechFlow = ai.defineFlow(
     retries: 3,
   },
   async (query) => {
-    const { media } = await ai.generate({
-      model: googleAI.model('gemini-2.5-flash-preview-tts'),
-      config: {
-        responseModalities: ['AUDIO'],
-        speechConfig: {
-          voiceConfig: {
-            prebuiltVoiceConfig: { voiceName: 'Algenib' },
+    try {
+      const { media } = await ai.generate({
+        model: googleAI.model('gemini-2.5-flash-preview-tts'),
+        config: {
+          responseModalities: ['AUDIO'],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: 'Algenib' },
+            },
           },
         },
-      },
-      prompt: query,
-    });
-    if (!media) {
-      throw new Error('no media returned');
+        prompt: query,
+      });
+      if (!media) {
+        return { error: "No media returned from the text-to-speech service." };
+      }
+      const audioBuffer = Buffer.from(
+        media.url.substring(media.url.indexOf(',') + 1),
+        'base64'
+      );
+      return {
+        media: 'data:audio/wav;base64,' + (await toWav(audioBuffer)),
+      };
+    } catch (e: any) {
+        console.error("Error in lessonToSpeechFlow:", e);
+        return { error: `The audio generation service is currently unavailable. Please try again later. Details: ${e.message}` };
     }
-    const audioBuffer = Buffer.from(
-      media.url.substring(media.url.indexOf(',') + 1),
-      'base64'
-    );
-    return {
-      media: 'data:audio/wav;base64,' + (await toWav(audioBuffer)),
-    };
   }
 );

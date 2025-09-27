@@ -37,14 +37,14 @@ export default function SampleLessonPage() {
         if (result.media) {
           setAudioData(result.media);
         } else {
-          throw new Error('Audio data is missing.');
+          throw new Error(result.error || 'Audio data is missing.');
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Failed to generate audio", error);
         toast({
             variant: "destructive",
             title: "Audio Generation Failed",
-            description: "We couldn't generate the audio for this lesson. Please try again later.",
+            description: error.message || "We couldn't generate the audio for this lesson. Please try again later.",
         });
         setIsAudioEnabled(false);
       } finally {
