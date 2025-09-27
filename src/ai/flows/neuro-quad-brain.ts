@@ -13,6 +13,7 @@ import { z } from 'genkit';
 import { mistakeMapper, MistakeMapperInputSchema } from './mistake-mapper';
 import { updateAiTwinProfile, AiTwinProfileUpdateInputSchema } from './ai-twin-profile-update';
 import { suggestLessonPlan, LessonPlanSuggestionsInputSchema } from './lesson-plan-suggestions';
+import { translateContent } from './translate-content';
 
 // Define complex Zod schemas for the main brain flow
 
@@ -131,9 +132,22 @@ const neuroQuadBrainFlow = ai.defineFlow(
                 studentAnswer: input.context.student_answer,
                 correctAnswer: input.context.correct_answer,
             });
-            output.result!.diagnosis = mistakeResult.analysis;
-            // Placeholder for remediation steps
-            output.result!.remediation_steps = ["Step 1: Review the concept.", "Step 2: Try a similar problem."];
+
+            const diagnosis = mistakeResult.analysis;
+            const remediation_steps = ["Step 1: Review the concept.", "Step 2: Try a similar problem."];
+
+            if (input.context.language !== 'en') {
+                const translatedDiagnosis = await translateContent({ content: diagnosis, targetLanguage: input.context.language });
+                const translatedSteps = await Promise.all(remediation_steps.map(async step => {
+                    const result = await translateContent({ content: step, targetLanguage: input.context.language });
+                    return result.translatedContent || step;
+                }));
+                output.result!.diagnosis = translatedDiagnosis.translatedContent || diagnosis;
+                output.result!.remediation_steps = translatedSteps;
+            } else {
+                output.result!.diagnosis = diagnosis;
+                output.result!.remediation_steps = remediation_steps;
+            }
         }
         break;
 
