@@ -81,7 +81,7 @@ const lessonToSpeechFlow = ai.defineFlow(
       };
     } catch (e: any) {
         console.error("Error in lessonToSpeechFlow:", e);
-        return { error: `The audio generation service is currently unavailable. Please try again later. Details: ${e.message}` };
+        return { error: "The audio generation service is currently unavailable. Please try again later." };
     }
   }
 );
