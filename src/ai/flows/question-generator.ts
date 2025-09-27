@@ -11,12 +11,12 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const QuestionGeneratorInputSchema = z.object({
+const QuestionGeneratorInputSchema = z.object({
   topic: z.string().describe('The topic for which to generate a question, e.g., "High School Algebra" or "Cellular Biology".'),
 });
 export type QuestionGeneratorInput = z.infer<typeof QuestionGeneratorInputSchema>;
 
-export const QuestionGeneratorOutputSchema = z.object({
+const QuestionGeneratorOutputSchema = z.object({
   question: z.string().describe('The generated question.'),
   correctAnswer: z.string().describe('The correct answer to the generated question.'),
 });
