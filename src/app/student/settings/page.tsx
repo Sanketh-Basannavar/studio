@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Bell, Brush, ChevronRight, LogOut, Globe } from 'lucide-react';
+import { Bell, Brush, ChevronRight, LogOut, Globe, WifiOff } from 'lucide-react';
 import Link from 'next/link';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useOfflineSync } from '@/hooks/use-offline-sync';
 
 export default function StudentSettingsPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isOffline, setOfflineMode } = useOfflineSync();
   
   useEffect(() => {
     const isDark = document.documentElement.classList.contains('dark');
@@ -48,6 +50,20 @@ export default function StudentSettingsPage() {
             <Switch
               checked={isDarkMode}
               onCheckedChange={handleThemeChange}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 rounded-lg border">
+            <div className="flex items-center gap-4">
+              <WifiOff className="h-6 w-6 text-primary" />
+              <div>
+                <h3 className="font-semibold">Offline Mode</h3>
+                <p className="text-sm text-muted-foreground">Simulate an offline environment.</p>
+              </div>
+            </div>
+            <Switch
+              checked={isOffline}
+              onCheckedChange={setOfflineMode}
             />
           </div>
 
