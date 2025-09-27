@@ -9,9 +9,11 @@ import { cn } from '@/lib/utils';
 import { Brain, Ear, Eye, Loader } from 'lucide-react';
 import { lessonToSpeech } from '@/ai/flows/text-to-speech';
 import { mockLessons } from '@/lib/mock-data';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SampleLessonPage() {
   const params = useParams();
+  const { toast } = useToast();
   const [isDyslexiaFriendly, setIsDyslexiaFriendly] = useState(false);
   const [isAdhdFriendly, setIsAdhdFriendly] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
@@ -34,9 +36,16 @@ export default function SampleLessonPage() {
         const result = await lessonToSpeech(lessonTextForAudio);
         if (result.media) {
           setAudioData(result.media);
+        } else {
+          throw new Error('Audio data is missing.');
         }
       } catch (error) {
         console.error("Failed to generate audio", error);
+        toast({
+            variant: "destructive",
+            title: "Audio Generation Failed",
+            description: "We couldn't generate the audio for this lesson. Please try again later.",
+        });
         setIsAudioEnabled(false);
       } finally {
         setIsGeneratingAudio(false);
