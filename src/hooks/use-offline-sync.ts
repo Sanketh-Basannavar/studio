@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-// We will import db dynamically inside the hook
 import { getFirestore } from 'firebase/firestore';
 import { app, disableNetwork, enableNetwork } from '@/lib/firebase';
 

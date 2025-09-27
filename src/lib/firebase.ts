@@ -11,14 +11,8 @@ const firebaseConfig = {
   "messagingSenderId": "213393110975"
 };
 
-function initializeFirebase() {
-  if (getApps().length) {
-    return getApp();
-  }
-  return initializeApp(firebaseConfig);
-}
-
-const app = initializeFirebase();
+// Initialize Firebase
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // This is the key part for offline support.
