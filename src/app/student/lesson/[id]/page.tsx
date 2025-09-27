@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -10,7 +10,8 @@ import { Brain, Ear, Eye, Loader } from 'lucide-react';
 import { lessonToSpeech } from '@/ai/flows/text-to-speech';
 import { mockLessons } from '@/lib/mock-data';
 
-export default function SampleLessonPage({ params }: { params: { id: string } }) {
+export default function SampleLessonPage() {
+  const params = useParams();
   const [isDyslexiaFriendly, setIsDyslexiaFriendly] = useState(false);
   const [isAdhdFriendly, setIsAdhdFriendly] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
