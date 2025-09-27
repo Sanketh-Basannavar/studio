@@ -53,7 +53,7 @@ export default function SampleLessonPage() {
             <CardTitle className="font-headline text-3xl">{lesson.title}</CardTitle>
             <CardDescription>{lesson.content.description}</CardDescription>
           </CardHeader>
-          <CardContent className={cn('prose dark:prose-invert max-w-none', isDyslexiaFriendly ? 'prose-xl' : 'prose-lg')}>
+          <CardContent className={cn('prose dark:prose-invert max-w-none', isDyslexiaFriendly ? 'dyslexia-friendly' : 'prose-lg')}>
             {lesson.content.sections.map((section, index) => (
               <div key={index}>
                 <h2>{section.heading}</h2>

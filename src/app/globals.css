@@ -83,3 +83,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .dyslexia-friendly {
+    @apply text-xl leading-loose tracking-wide;
+  }
+}
