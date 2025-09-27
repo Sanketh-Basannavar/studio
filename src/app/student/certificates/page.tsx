@@ -1,7 +1,10 @@
+'use client';
+
 import { Award, Check, Download } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import jsPDF from 'jspdf';
 
 const completedCertificates = [
     {
@@ -17,6 +20,41 @@ const completedCertificates = [
 ];
 
 export default function CertificatesPage() {
+
+    const handleDownload = (cert: typeof completedCertificates[0]) => {
+        const doc = new jsPDF();
+    
+        doc.setFontSize(30);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Certificate of Achievement", 105, 40, { align: 'center' });
+    
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'normal');
+        doc.text("This is to certify that", 105, 60, { align: 'center' });
+    
+        doc.setFontSize(22);
+        doc.setFont('helvetica', 'bold');
+        doc.text("Alex Johnson", 105, 80, { align: 'center' });
+    
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'normal');
+        doc.text("has successfully completed the lesson", 105, 100, { align: 'center' });
+    
+        doc.setFontSize(20);
+        doc.setFont('helvetica', 'italic');
+        doc.text(`"${cert.lesson}"`, 105, 120, { align: 'center' });
+    
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Completed on: ${cert.date}`, 105, 140, { align: 'center' });
+    
+        doc.setFontSize(10);
+        doc.setFont('courier', 'normal');
+        doc.text(`Certificate ID: ${cert.certificateId}`, 105, 160, { align: 'center' });
+    
+        doc.save(`${cert.lesson.replace(/ /g, '_')}_Certificate.pdf`);
+    };
+
     return (
         <div className="space-y-8">
             <div>
@@ -45,7 +83,7 @@ export default function CertificatesPage() {
                                         <p className="text-xs text-muted-foreground mt-1 font-mono">ID: {cert.certificateId}</p>
                                     </div>
                                     <div className="flex gap-2 justify-self-end">
-                                        <Button variant="outline" size="sm">
+                                        <Button variant="outline" size="sm" onClick={() => handleDownload(cert)}>
                                             <Download className="mr-2 h-4 w-4" />
                                             Download
                                         </Button>
