@@ -52,6 +52,7 @@ const lessonToSpeechFlow = ai.defineFlow(
     name: 'lessonToSpeechFlow',
     inputSchema: z.string(),
     outputSchema: LessonToSpeechOutputSchema,
+    retries: 3,
   },
   async (query) => {
     const { media } = await ai.generate({
