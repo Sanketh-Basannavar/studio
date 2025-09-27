@@ -7,6 +7,7 @@ import {
   BrainCircuit,
   LayoutDashboard,
   Settings,
+  Sparkles,
 } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import {
@@ -23,6 +24,7 @@ const menuItems = [
   { href: '/teacher/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/teacher/students', label: 'Students', icon: Users },
   { href: '/teacher/ai-coaching', label: 'AI Coaching', icon: BrainCircuit },
+  { href: '/teacher/ai-twin', label: 'AI Twin', icon: Sparkles },
 ];
 
 export default function TeacherSidebar() {

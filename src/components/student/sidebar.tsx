@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   Settings,
   Target,
+  Star,
+  Award,
 } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import {
@@ -24,6 +26,8 @@ const menuItems = [
   { href: '/student/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/student/mistake-mapper', label: 'Mistake Mapper', icon: Target },
   { href: '/student/profile', label: 'AI Twin Profile', icon: BrainCircuit },
+  { href: '/student/rewards', label: 'EduCredits', icon: Star },
+  { href: '/student/certificates', label: 'Certificates', icon: Award },
 ];
 
 export default function StudentSidebar() {
