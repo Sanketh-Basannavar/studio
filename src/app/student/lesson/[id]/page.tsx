@@ -6,10 +6,16 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { Brain, Ear, Eye, Loader } from 'lucide-react';
+import { Brain, Ear, Eye, Loader, FileImage } from 'lucide-react';
 import { lessonToSpeech } from '@/ai/flows/text-to-speech';
+import { generateImageForLesson } from '@/ai/flows/image-generator';
 import { mockLessons } from '@/lib/mock-data';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
+type GeneratedImages = { [key: number]: string };
+type ImageLoadingState = { [key: number]: boolean };
 
 export default function SampleLessonPage() {
   const params = useParams();
@@ -17,8 +23,11 @@ export default function SampleLessonPage() {
   const [isDyslexiaFriendly, setIsDyslexiaFriendly] = useState(false);
   const [isAdhdFriendly, setIsAdhdFriendly] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
+  const [isVisualMode, setIsVisualMode] = useState(false);
   const [audioData, setAudioData] = useState<string | null>(null);
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false);
+  const [generatedImages, setGeneratedImages] = useState<GeneratedImages>({});
+  const [isGeneratingImages, setIsGeneratingImages] = useState<ImageLoadingState>({});
   
   const lesson = mockLessons.find(l => l.id === params.id);
 
@@ -60,6 +69,42 @@ export default function SampleLessonPage() {
     }
   };
 
+  const handleVisualModeToggle = (checked: boolean) => {
+    setIsVisualMode(checked);
+    if (checked && Object.keys(generatedImages).length === 0) {
+      lesson.content.sections.forEach((section, index) => {
+        // Only generate if image doesn't exist
+        if (!generatedImages[index]) {
+          setIsGeneratingImages(prev => ({ ...prev, [index]: true }));
+          const contentToVisualize = `${section.heading}: ${section.paragraphs.join(' ')}`;
+          generateImageForLesson({ lessonContent: contentToVisualize })
+            .then(result => {
+              if (result.imageUrl) {
+                setGeneratedImages(prev => ({ ...prev, [index]: result.imageUrl as string }));
+              } else {
+                toast({
+                  variant: "destructive",
+                  title: "Image Generation Failed",
+                  description: result.error || `Could not generate image for section "${section.heading}".`,
+                });
+              }
+            })
+            .catch(error => {
+              console.error("Failed to generate image for section", index, error);
+              toast({
+                  variant: "destructive",
+                  title: "Image Generation Failed",
+                  description: `Could not generate image for section "${section.heading}".`,
+              });
+            })
+            .finally(() => {
+              setIsGeneratingImages(prev => ({ ...prev, [index]: false }));
+            });
+        }
+      });
+    }
+  };
+
 
   return (
     <div className="grid gap-8 lg:grid-cols-3">
@@ -73,6 +118,25 @@ export default function SampleLessonPage() {
             {lesson.content.sections.map((section, index) => (
               <div key={index}>
                 <h2>{section.heading}</h2>
+                {isVisualMode && (
+                  <div className="my-4">
+                    {isGeneratingImages[index] && (
+                      <div className="flex items-center justify-center h-48 bg-secondary rounded-lg">
+                        <Loader className="h-8 w-8 animate-spin text-primary" />
+                      </div>
+                    )}
+                    {generatedImages[index] && (
+                      <div className="relative aspect-video rounded-lg overflow-hidden border">
+                         <Image
+                           src={generatedImages[index]}
+                           alt={`Generated image for ${section.heading}`}
+                           fill
+                           className="object-contain"
+                         />
+                      </div>
+                    )}
+                  </div>
+                )}
                 {section.paragraphs.map((p, i) => (
                   <p key={i} dangerouslySetInnerHTML={{ __html: p.includes('→') ? `<code>${p}</code>` : p }}></p>
                 ))}
@@ -111,11 +175,21 @@ export default function SampleLessonPage() {
             <Separator />
             <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-secondary">
               <Ear className="h-5 w-5 text-primary" />
-              <Label htmlFor="audio-mode" className="flex-grow">Enable Audio</Label>
+              <Label htmlFor="audio-mode" className="flex-grow">Enable Audio (TTS)</Label>
               <Switch
                 id="audio-mode"
                 checked={isAudioEnabled}
                 onCheckedChange={handleAudioToggle}
+              />
+            </div>
+             <Separator />
+            <div className="flex items-center space-x-2 p-2 rounded-md hover:bg-secondary">
+              <FileImage className="h-5 w-5 text-primary" />
+              <Label htmlFor="visual-mode" className="flex-grow">Visual Mode</Label>
+              <Switch
+                id="visual-mode"
+                checked={isVisualMode}
+                onCheckedChange={handleVisualModeToggle}
               />
             </div>
           </CardContent>
