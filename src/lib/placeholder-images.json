@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "student-avatar-1",
+      "description": "Avatar of a female student with glasses",
+      "imageUrl": "https://images.unsplash.com/photo-1574132190990-cfd62178bb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdHVkZW50JTIwYXZhdGFyfGVufDB8fHx8MTc1ODk0ODE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-2",
+      "description": "Avatar of a male student smiling",
+      "imageUrl": "https://images.unsplash.com/photo-1729824186684-eaff43f7d1d9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzdHVkZW50JTIwYXZhdGFyfGVufDB8fHx8MTc1ODk0ODE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-3",
+      "description": "Avatar of a student with headphones",
+      "imageUrl": "https://images.unsplash.com/photo-1574132190990-cfd62178bb1c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdHVkZW50JTIwYXZhdGFyfGVufDB8fHx8MTc1ODk0ODE5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "student-avatar-4",
+      "description": "Avatar of a student with curly hair",
+      "imageUrl": "https://images.unsplash.com/photo-1729821728830-068bbff90645?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3R1ZGVudCUyMGF2YXRhcnxlbnwwfHx8fDE3NTg5NDgxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "student avatar"
+    },
+    {
+      "id": "teacher-avatar-1",
+      "description": "Avatar of a female teacher",
+      "imageUrl": "https://images.unsplash.com/photo-1614492898637-435e0f87cef8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dGVhY2hlciUyMGF2YXRhcnxlbnwwfHx8fDE3NTg5NDgxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "teacher avatar"
+    },
+    {
+      "id": "login-background",
+      "description": "Abstract background with neural network-like patterns",
+      "imageUrl": "https://images.unsplash.com/photo-1750969185331-e03829f72c7d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMG5ldXJhbHxlbnwwfHx8fDE3NTg5NDgxOTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract neural"
+    }
+  ]
 }

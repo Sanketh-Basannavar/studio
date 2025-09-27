@@ -1,1 +1,6 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/lesson-plan-suggestions.ts';
+import '@/ai/flows/mistake-mapper.ts';
+import '@/ai/flows/ai-twin-profile-update.ts';
