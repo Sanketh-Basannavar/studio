@@ -22,6 +22,8 @@ import { Separator } from '../ui/separator';
 import MistakeSimilarityChart from './mistake-similarity-chart';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Label } from '../ui/label';
 
 const formSchema = z.object({
   studentAnswer: z.string().min(1, 'Please enter your answer.'),
@@ -33,6 +35,7 @@ export default function MistakeMapperClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGeneratingQuestion, setIsGeneratingQuestion] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+  const [topic, setTopic] = useState('High School Algebra');
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,7 +52,7 @@ export default function MistakeMapperClient() {
     setIsCorrect(null);
     form.reset();
     try {
-      const result = await generateQuestion({ topic: 'High School Algebra' });
+      const result = await generateQuestion({ topic });
       if (result.error || !result.question || !result.correctAnswer) {
         throw new Error(result.error || 'Failed to generate question.');
       }
@@ -101,20 +104,37 @@ export default function MistakeMapperClient() {
         {!generatedQuestion && (
           <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground p-12 text-center h-full">
              <h3 className="text-lg font-semibold">Get Started</h3>
-            <p className="text-sm text-muted-foreground mb-4">Generate a question to test your knowledge.</p>
-            <Button onClick={handleGenerateQuestion} disabled={isGeneratingQuestion}>
-              {isGeneratingQuestion ? (
-                <>
-                  <Loader className="mr-2 h-4 w-4 animate-spin" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Lightbulb className="mr-2 h-4 w-4" />
-                  Generate New Question
-                </>
-              )}
-            </Button>
+            <p className="text-sm text-muted-foreground mb-4">Choose a subject to test your knowledge.</p>
+            <div className='space-y-4 w-full max-w-sm'>
+              <div className="space-y-2">
+                <Label htmlFor="subject-select" className="sr-only">Subject</Label>
+                <Select value={topic} onValueChange={setTopic}>
+                  <SelectTrigger id="subject-select">
+                    <SelectValue placeholder="Select a subject..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="High School Algebra">Algebra</SelectItem>
+                    <SelectItem value="Cellular Biology">Biology</SelectItem>
+                    <SelectItem value="World History">History</SelectItem>
+                    <SelectItem value="Basic Chemistry">Chemistry</SelectItem>
+                    <SelectItem value="English Literature">Literature</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleGenerateQuestion} disabled={isGeneratingQuestion} className='w-full'>
+                {isGeneratingQuestion ? (
+                  <>
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Lightbulb className="mr-2 h-4 w-4" />
+                    Generate New Question
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         )}
 
@@ -128,6 +148,7 @@ export default function MistakeMapperClient() {
           <Card>
             <CardHeader>
               <CardTitle>Your Question</CardTitle>
+              <CardDescription>Topic: {topic.replace('High School ', '').replace('Cellular ', '')}</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-lg font-semibold mb-6">{generatedQuestion.question}</p>
@@ -160,8 +181,8 @@ export default function MistakeMapperClient() {
                         </>
                       )}
                     </Button>
-                    <Button variant="outline" onClick={handleGenerateQuestion} disabled={isLoading || isGeneratingQuestion}>
-                      New Question
+                    <Button variant="outline" onClick={() => setGeneratedQuestion(null)} disabled={isLoading || isGeneratingQuestion}>
+                      New Topic
                     </Button>
                   </div>
                 </form>
