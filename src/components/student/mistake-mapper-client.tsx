@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { mistakeMapper, type MistakeMapperOutput } from '@/ai/flows/mistake-mapper';
 import { Loader, Wand2 } from 'lucide-react';
 import { Separator } from '../ui/separator';
+import MistakeSimilarityChart from './mistake-similarity-chart';
 
 const formSchema = z.object({
   question: z.string().min(10, 'Please enter a detailed question.'),
@@ -126,22 +127,26 @@ export default function MistakeMapperClient() {
       <Card className="flex flex-col">
         <CardHeader>
             <CardTitle>AI Analysis</CardTitle>
-            <CardDescription>Here is a step-by-step breakdown of the solution.</CardDescription>
+            <CardDescription>Here is a step-by-step breakdown and similarity score.</CardDescription>
         </CardHeader>
         <Separator />
-        <CardContent className="pt-6 flex-grow">
+        <CardContent className="pt-6 flex-grow flex flex-col gap-4">
           {isLoading && (
             <div className="flex items-center justify-center h-full">
               <Loader className="h-8 w-8 animate-spin text-primary" />
             </div>
           )}
           {analysis && (
-             <div
-             className="prose prose-sm dark:prose-invert max-w-none"
-             dangerouslySetInnerHTML={{
-               __html: analysis.analysis.replace(/\n/g, '<br />'),
-             }}
-           />
+            <>
+              <MistakeSimilarityChart score={analysis.similarityScore} />
+              <Separator />
+              <div
+                className="prose prose-sm dark:prose-invert max-w-none flex-grow"
+                dangerouslySetInnerHTML={{
+                  __html: analysis.analysis.replace(/\n/g, '<br />'),
+                }}
+              />
+            </>
           )}
           {!isLoading && !analysis && (
             <div className="flex items-center justify-center h-full">
