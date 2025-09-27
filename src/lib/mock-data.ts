@@ -1,3 +1,4 @@
+
 export const mockStudent = {
   id: 'st-001',
   name: 'Alex',
@@ -180,8 +181,52 @@ export const mockRecentActivity = [
 ]
 
 export const mockAssignments = [
-    { id: 'assign-01', title: 'Quadratic Equations Worksheet', subject: 'Algebra', dueDate: '3 days', type: 'Worksheet' },
-    { id: 'assign-02', title: 'Cellular Respiration Quiz', subject: 'Biology', dueDate: '5 days', type: 'Quiz' },
+    { 
+        id: 'assign-01', 
+        title: 'Quadratic Equations Worksheet', 
+        subject: 'Algebra', 
+        dueDate: '3 days', 
+        type: 'Worksheet',
+        content: `
+Instructions: Solve the following quadratic equations. Show your work.
+
+1. Find the roots of the equation: x² - 8x + 15 = 0
+2. Solve for x: 2x² + 5x - 3 = 0
+3. Factor the equation: x² - 16 = 0
+4. Find the vertex of the parabola: y = x² + 4x + 1
+5. A rectangle has a length that is 2 units more than its width. If the area is 48 square units, find the dimensions of the rectangle.
+`
+    },
+    { 
+        id: 'assign-02', 
+        title: 'Cellular Respiration Quiz', 
+        subject: 'Biology', 
+        dueDate: '5 days', 
+        type: 'Quiz',
+        content: `
+Instructions: Choose the best answer for each question.
+
+1. What is the primary purpose of cellular respiration?
+   a) To produce oxygen
+   b) To create ATP energy
+   c) To consume glucose
+   d) To release carbon dioxide
+
+2. Which of the following is NOT a stage of cellular respiration?
+   a) Glycolysis
+   b) Photosynthesis
+   c) Krebs Cycle (Citric Acid Cycle)
+   d) Electron Transport Chain
+
+3. Where does glycolysis occur in the cell?
+   a) Mitochondria
+   b) Nucleus
+   c) Cytoplasm
+   d) Chloroplast
+
+Correct Answers: 1(b), 2(b), 3(c)
+`
+    },
 ];
 
 export const mockStudentDoubts = [

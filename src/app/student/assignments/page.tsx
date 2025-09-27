@@ -11,7 +11,7 @@ import { Separator } from '@/components/ui/separator';
 export default function AssignmentsPage() {
 
     const handleDownload = (item: typeof mockAssignments[0]) => {
-        const content = `Subject: ${item.subject}\nType: ${item.type}\n\nTitle: ${item.title}\n\nThis is the content of your assignment. In a real application, this would be a PDF or a more structured document.`;
+        const content = `Subject: ${item.subject}\nType: ${item.type}\n\nTitle: ${item.title}\n\n${item.content}`;
         const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
